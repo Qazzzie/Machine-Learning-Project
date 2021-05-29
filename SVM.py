@@ -42,7 +42,7 @@ def sanitize_data(row):
 star_features = []
 star_classes = []
  ##INSERT YOUR DATA FILE PATH ON THE NEXT LINE
-data_file_path = 'C:\\Users\\morga\\GitHub\\Machine-Learning-Project\\stardata\\Stars.csv'
+data_file_path = 'stardata\\Stars.csv'
 import csv
 with open(data_file_path) as csvfile:
     reader = csv.reader(csvfile, delimiter =',')
