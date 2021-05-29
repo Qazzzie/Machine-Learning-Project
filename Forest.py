@@ -1,13 +1,15 @@
 from sklearn.ensemble import RandomForestClassifier
-import csv
+import utilities
+from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score
 
-with open(data_file_path) as csvfile:
-    reader = csv.reader(csvfile, delimiter =',')
-    next(reader)
-    for row in reader:
-        data = sanitize_data(row)
-        if data:
-            star_features.append(data)       #add the input features to the features list
-            star_classes.append(int(row[6])) #add the class to the class list
+X_train, X_test, Y_train, Y_test = utilities.get_data_as_train_test_split(test_size=.33, random_state=None)
+Random_Forest = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+Random_Forest.fit(X_train, Y_train)
+Y_pred = Random_Forest.predict(X_test)
+accuracy = accuracy_score(Y_test, Y_pred)
+confusion_matrix = confusion_matrix(Y_test, Y_pred)
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
+print(f'Test accuracy:', accuracy)
+print(f'Test precision is', precision_score(Y_test, Y_pred, average='weighted'))
+print(f'Test recall is', recall_score(Y_test, Y_pred, average='weighted'))
+print(f'Confusion matrix:\n', confusion_matrix)
