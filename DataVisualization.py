@@ -1,7 +1,4 @@
-"""
-    SVM Star classifier
-
-"""
+## Data visualization playground
 
 ## Import packages  ##
 
@@ -14,7 +11,6 @@ import numpy as np
 import csv 
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
-from sklearn.inspection import permutation_importance
 
 
 ## Import and sanitize data ##
@@ -42,7 +38,7 @@ def sanitize_data(row):
 
 star_features = []
 star_classes = []
-data_file_path = 'stardata\\Stars.csv'
+data_file_path = 'C:\\Users\morga\\GitHub\\Machine-Learning-Project\\stardata\\Stars.csv' #stardata\\Stars.csv
 import csv
 with open(data_file_path) as csvfile:
     reader = csv.reader(csvfile, delimiter =',')
@@ -63,32 +59,14 @@ scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
-m = len(Y_train)
-n = len(X_train[0]) +1
-print(f'Number of training instances is',m)
-print(f'Number of features is',n)
+plt.plot(X_train[:, 0][Y_train==0], X_train[:, 3][Y_train==0], 'rs', label="Red Dwarf")
+plt.plot(X_train[:, 0][Y_train==1], X_train[:, 3][Y_train==1], 'yo', label='Brown Dwarf')
+plt.plot(X_train[:, 0][Y_train==2], X_train[:, 3][Y_train==2], 'bs', label="White Dwarf")
+plt.plot(X_train[:, 0][Y_train==3], X_train[:, 3][Y_train==3], 'ro', label='Main Sequence')
+plt.plot(X_train[:, 0][Y_train==4], X_train[:, 3][Y_train==4], 'bo', label="Super Giants")
+plt.plot(X_train[:, 0][Y_train==5], X_train[:, 3][Y_train==5], 'ys', label="Hyper Giants")
+plt.xlabel('Normalized Average Temperature')
+plt.ylabel('Normalized Absolute Magnitude')
+plt.legend()
 
-
-## Build SVM ##
-svc = SVC()
-params_ = {   #These are the parameters to test for the support vector machine
-    "kernel": ['linear', 'poly','sigmoid', 'rbf'],
-    "C": [0.1, 1, 10, 100], #1, 10
-    "degree": [1, 2, 3]
-}
-
-star_svc = GridSearchCV(svc, params_, verbose=1, scoring = 'accuracy')   #Perform a grid search to find the best parameters, based on the accuracy score
-star_svc.fit(X_train, Y_train)
-
-Y_pred = star_svc.predict(X_test)
-accuracy = accuracy_score(Y_test, Y_pred)
-print(f"Best parameters from the grid search were {star_svc.best_params_}")
-print(f"Accuracy of training set is {star_svc.best_score_}")
-print(f'Best test accuracy is',accuracy)
-conf_matrix = confusion_matrix(Y_test,Y_pred)
-print(f'Confusion matrix:\n',conf_matrix)
-
-
-res = permutation_importance(star_svc, X_train, Y_train, scoring='accuracy', n_repeats=20, random_state=42)
-p_importances = res['importances_mean']/res['importances_mean'].sum()
-print(f"The permutation-based feature importance is {p_importances}")
+#Next: plot based on most important features (look at feature importance)
