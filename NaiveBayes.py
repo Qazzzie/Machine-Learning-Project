@@ -1,4 +1,5 @@
 from sklearn.naive_bayes import GaussianNB
+from sklearn.inspection import permutation_importance
 from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, precision_score
 import utilities
 
@@ -22,3 +23,7 @@ if __name__ == '__main__':
     print(f'Test accuracy:', accuracy)
     print(f'Test precision is', precision_score(Y_test, Y_pred, average='weighted'))
     print(f'Test recall is', recall_score(Y_test, Y_pred, average='weighted'))
+
+    res = permutation_importance(gnb, X_train, Y_train, scoring='accuracy', n_repeats=20, random_state=42)
+    p_importances = res['importances_mean'] / res['importances_mean'].sum()
+    print(f"The permutation-based feature importance is {p_importances}")
