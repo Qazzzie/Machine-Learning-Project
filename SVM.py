@@ -1,10 +1,8 @@
 """
     SVM Star classifier
-
 """
 
 ## Import packages  ##
-
 from sklearn.metrics import confusion_matrix, accuracy_score, roc_curve
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -56,39 +54,40 @@ with open(data_file_path) as csvfile:
 X = np.array(star_features)
 Y = np.array(star_classes)
 
-# Split into train and test sets
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
-# Scale data
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+if __name__ == '__main__': #added by kelli to run file in pycharm
+    # Split into train and test sets
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
+    # Scale data
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
 
-m = len(Y_train)
-n = len(X_train[0]) +1
-print(f'Number of training instances is',m)
-print(f'Number of features is',n)
-
-
-## Build SVM ##
-svc = SVC()
-params_ = {   #These are the parameters to test for the support vector machine
-    "kernel": ['linear', 'poly','sigmoid', 'rbf'],
-    "C": [0.1, 1, 10, 100], #1, 10
-    "degree": [1, 2, 3]
-}
-
-star_svc = GridSearchCV(svc, params_, verbose=1, scoring = 'accuracy')   #Perform a grid search to find the best parameters, based on the accuracy score
-star_svc.fit(X_train, Y_train)
-
-Y_pred = star_svc.predict(X_test)
-accuracy = accuracy_score(Y_test, Y_pred)
-print(f"Best parameters from the grid search were {star_svc.best_params_}")
-print(f"Accuracy of training set is {star_svc.best_score_}")
-print(f'Best test accuracy is',accuracy)
-conf_matrix = confusion_matrix(Y_test,Y_pred)
-print(f'Confusion matrix:\n',conf_matrix)
+    m = len(Y_train)
+    n = len(X_train[0]) +1
+    print(f'Number of training instances is',m)
+    print(f'Number of features is',n)
 
 
-res = permutation_importance(star_svc, X_train, Y_train, scoring='accuracy', n_repeats=20, random_state=42)
-p_importances = res['importances_mean']/res['importances_mean'].sum()
-print(f"The permutation-based feature importance is {p_importances}")
+    ## Build SVM ##
+    svc = SVC()
+    params_ = {   #These are the parameters to test for the support vector machine
+        "kernel": ['linear', 'poly','sigmoid', 'rbf'],
+        "C": [0.1, 1, 10, 100], #1, 10
+        "degree": [1, 2, 3]
+    }
+
+    star_svc = GridSearchCV(svc, params_, verbose=1, scoring = 'accuracy')   #Perform a grid search to find the best parameters, based on the accuracy score
+    star_svc.fit(X_train, Y_train)
+
+    Y_pred = star_svc.predict(X_test)
+    accuracy = accuracy_score(Y_test, Y_pred)
+    print(f"Best parameters from the grid search were {star_svc.best_params_}")
+    print(f"Accuracy of training set is {star_svc.best_score_}")
+    print(f'Best test accuracy is',accuracy)
+    conf_matrix = confusion_matrix(Y_test,Y_pred)
+    print(f'Confusion matrix:\n',conf_matrix)
+
+
+    res = permutation_importance(star_svc, X_train, Y_train, scoring='accuracy', n_repeats=20, random_state=42)
+    p_importances = res['importances_mean']/res['importances_mean'].sum()
+    print(f"The permutation-based feature importance is {p_importances}")
