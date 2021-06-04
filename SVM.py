@@ -54,7 +54,7 @@ with open(data_file_path) as csvfile:
 X = np.array(star_features)
 Y = np.array(star_classes)
 
-if __name__ == '__main__': #added by kelli to be run file in pycharm
+if __name__ == '__main__': #added by kelli to run file in pycharm
     # Split into train and test sets
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
     # Scale data
