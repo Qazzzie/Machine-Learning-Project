@@ -5,8 +5,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score, recall_score, prec
 from sklearn.inspection import permutation_importance
 
 if __name__ == '__main__':
-    X_train, X_test, Y_train, Y_test = utilities.get_data_as_train_test_split(
-        test_size=.33, random_state=None)
+    X_train, X_test, Y_train, Y_test = utilities.get_data_as_train_test_split(test_size=.33, random_state=None)
     m = len(Y_train)
     n = len(X_train[0]) + 1
     print(f'Number of training instances is', m)
@@ -25,7 +24,7 @@ if __name__ == '__main__':
     classifier.fit(X_train, Y_train)
 
     Y_pred = classifier.predict(X_test)
-    accuracy = accuracy_score(Y_test, Y_pred,)
+    accuracy = accuracy_score(Y_test, Y_pred)
     conf_matrix = confusion_matrix(Y_test, Y_pred)
 
     print(
